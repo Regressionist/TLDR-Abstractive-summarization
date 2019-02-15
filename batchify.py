@@ -84,8 +84,10 @@ class Corpus(object):
     def get_train_minibatch(self):
         body_batch=[]
         summary_batch=[]
-        max_length_body=max(self.df_train['body_len'][self.counter:self.counter+20])
+        #max_length_body=max(self.df_train['body_len'][self.counter:self.counter+20])
         max_length_summary=max(self.df_train['sum_len'][self.counter:self.counter+20])
+        max_length_body=400
+        #max_length_summary=100
         for index, row in self.df_train.iterrows():
             if (index>=self.counter and index<self.counter+20):
                 with open(row['file_path']) as f:
@@ -135,7 +137,7 @@ class Corpus(object):
     def get_validation_batch(self):
         #body_batch=[]
         #summary_batch=[]
-        max_length_body=max(self.df_val['body_len'][:])
+        max_length_body=400
         max_length_summary=max(self.df_val['sum_len'][:])
         body_batch=np.zeros((44,max_length_body))
         summary_batch=np.zeros((44,max_length_summary))

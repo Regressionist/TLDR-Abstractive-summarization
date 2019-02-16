@@ -46,7 +46,7 @@ class Corpus(object):
                 text = text.split('@highlight')
                 body = text[0].strip()
                 len_dic[file]=len(body.split())
-            len_dic=sorted(len_dic.items(),key=operator.itemgetter(1))
+            #len_dic=sorted(len_dic.items(),key=operator.itemgetter(1))
             self.df=pd.DataFrame(len_dic, columns=['file_path','body_len'])
             sum_lens=[]
             for file in file_list:
@@ -85,11 +85,11 @@ class Corpus(object):
         body_batch=[]
         summary_batch=[]
         #max_length_body=max(self.df_train['body_len'][self.counter:self.counter+20])
-        max_length_summary=max(self.df_train['sum_len'][self.counter:self.counter+20])
+        max_length_summary=max(self.df_train['sum_len'][self.counter:self.counter+8])
         max_length_body=400
         #max_length_summary=100
         for index, row in self.df_train.iterrows():
-            if (index>=self.counter and index<self.counter+20):
+            if (index>=self.counter and index<self.counter+8):
                 with open(row['file_path']) as f:
                     text=f.read()
                     text = text.replace("\n\n",' ')
@@ -127,8 +127,8 @@ class Corpus(object):
         
         body_batch=np.matrix(body_batch)
         summary_batch=np.matrix(summary_batch)
-        if (self.counter+20<self.df_train.shape[0]):
-            self.counter=self.counter+20
+        if (self.counter+8<self.df_train.shape[0]):
+            self.counter=self.counter+8
         else:
             self.counter=0
         

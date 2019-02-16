@@ -16,7 +16,7 @@ class Encoder(nn.Module):
         
         self.embedding=nn.Embedding(vocab_size,embedding_size)
         self.gru=nn.GRU(embedding_size, hidden_size, num_layers=1, batch_first=True, bidirectional=True)
-        
+        #self.linear=nn.Linear(2*self.hidden_size,hidden_size)
     
     def forward(self,enc_input,device=device):
         #enc_input: batch*seq_len
@@ -58,7 +58,7 @@ class Decoder(nn.Module):
         batch_size=enc_hidden.size(1)
         enc_seq_len=enc_output.size(1)
         enc_hidden=(self.linear1(enc_hidden.view(-1,2*self.hidden_dim))) #enc_hidden:batch,hidden_dim
-        enc_output=(self.linear1(enc_output.view(-1,2*self.hidden_dim))).view(batch_size,-1,self.hidden_dim) #enc_output:batch,enc_seq_len,hidden_dim
+        enc_output=(self.linear2(enc_output.view(-1,2*self.hidden_dim))).view(batch_size,-1,self.hidden_dim) #enc_output:batch,enc_seq_len,hidden_dim
         dec_hidden=enc_hidden.unsqueeze(0)
         decoded=torch.zeros(batch_size, dec_len, device=device).detach()
         decoded_outputs=torch.zeros(batch_size, dec_len, self.vocab_size, device=device).detach()
